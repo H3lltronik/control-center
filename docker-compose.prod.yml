@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  central-control-production:
+    container_name: central-control-production
+    build:
+      target: production
+      context: .
+      args:
+        - PORT=${PORT:-3000}
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "512m"
+        reservations:
+          cpus: "0.25"
+          memory: "256m"
+    restart: always
+    depends_on:
+      - postgres-production
+    env_file: .env
+    environment:
+      - DATABASE_HOST=postgres-production
+      - DATABASE_PORT=5432
+      - NODE_ENV=production
+
+  postgres-production:
+    image: postgres:16-alpine
+    container_name: central-control-postgres-production
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=${DATABASE_USER:-postgres}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-postgres}
+      - POSTGRES_DB=${DATABASE_NAME:-central_control}
+    volumes:
+      - postgres_production_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1g"
+
+volumes:
+  postgres_production_data: 

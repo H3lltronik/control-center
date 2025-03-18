@@ -8,6 +8,11 @@ import request from "supertest";
 
 import { AppModule } from "@/app/app.module";
 
+// Interface para extender los tipos de FastifyInstance
+interface FastifyInstanceWithReady {
+  ready: () => Promise<void>;
+}
+
 describe("Health", () => {
   let app: NestFastifyApplication;
 
@@ -20,7 +25,13 @@ describe("Health", () => {
       new FastifyAdapter(),
     );
     await app.init();
-    await app.getHttpAdapter().getInstance().ready();
+
+    // Use double type assertion with unknown as intermediary
+    const server = app
+      .getHttpAdapter()
+      .getInstance() as unknown as FastifyInstanceWithReady;
+    await server.ready();
+
     nock.disableNetConnect();
     nock.enableNetConnect("127.0.0.1");
   });

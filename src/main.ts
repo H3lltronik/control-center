@@ -1,4 +1,5 @@
 import { Logger } from "@nestjs/common";
+import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import {
@@ -8,20 +9,38 @@ import {
 
 import { AppModule } from "@/app/app.module";
 
+import { SecurityService } from "./common/security.service";
+
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
 
+  // Set up global validation pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
+
+  // Configure API prefix
   app.setGlobalPrefix("api");
+
+  // Set up security features
+  const securityService = app.get(SecurityService);
+  securityService.setupSecurity(app.getHttpAdapter().getInstance());
+
+  // Start the application
   const configService = app.get(ConfigService);
   const port = configService.get<string>("PORT", "3000");
 
   await app.listen(port, "0.0.0.0");
 
   const logger = app.get(Logger);
-  logger.log(`App is ready and listening on port ${port} 🚀`);
+  logger.log(`Central Control is ready and listening on port ${port} 🚀`);
 }
 
 bootstrap().catch(handleError);

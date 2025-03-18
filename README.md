@@ -1,3 +1,98 @@
+# Central Control
+
+Central Control is a monitoring and tracking application for client installations and system logs. It provides a centralized way to collect and monitor logs from various client installations.
+
+## Features
+
+- Track customers and their product installations
+- Collect and store logs from various client applications
+- Secure API with CORS protection and IP whitelisting
+- Health monitoring endpoints
+
+## Tech Stack
+
+- NestJS with Fastify
+- PostgreSQL with TypeORM
+- Docker for containerization
+
+## Getting Started
+
+### Prerequisites
+
+- Docker and Docker Compose
+- Node.js 20.x or higher
+- pnpm 9.x or npm
+
+### Installation
+
+1. Clone the repository
+2. Copy `.env.example` to `.env` and configure as needed
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+> **Note about dependency issues**: If you encounter dependency conflicts with vitest or other packages, please see `DEPENDENCY_ISSUES.md` for detailed solutions.
+
+### Development
+
+Para ejecutar la aplicación en modo desarrollo:
+
+```bash
+# Usando el script de ayuda
+./start-app.sh dev
+
+# O directamente con docker-compose
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
+### Production
+
+Para ejecutar la aplicación en modo producción:
+
+```bash
+# Usando el script de ayuda
+./start-app.sh prod
+
+# O directamente con docker-compose
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+### Detener la aplicación
+
+```bash
+docker-compose down
+```
+
+## API Endpoints
+
+- `POST /api/logs` - Create a new log entry
+- `POST /api/customers` - Create a new customer
+- `POST /api/installations` - Create a new installation
+- `GET /api/health` - Health check endpoint
+
+## Security
+
+This application implements several security measures:
+
+- Helmet for secure HTTP headers
+- CORS protection with origin whitelisting
+- Input validation using class-validator
+- TypeORM for SQL injection protection
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| PORT | The port the server runs on | 3000 |
+| DATABASE_HOST | PostgreSQL host | postgres |
+| DATABASE_PORT | PostgreSQL port | 5432 |
+| DATABASE_USER | PostgreSQL username | postgres |
+| DATABASE_PASSWORD | PostgreSQL password | postgres |
+| DATABASE_NAME | PostgreSQL database name | central_control |
+| DATABASE_SYNC | Enable TypeORM synchronization | true |
+| ALLOWED_ORIGINS | Comma-separated list of allowed CORS origins | http://localhost:3000,http://127.0.0.1:3000 |
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="images/nestjs.png" alt="Nest Logo" width="512" /></a>
 </p>

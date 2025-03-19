@@ -251,10 +251,12 @@ La API se configura mediante variables de entorno:
 
 | Variable        | Descripción                         | Default                |
 |-----------------|-------------------------------------|------------------------|
-| PORT            | Puerto del servidor                 | 3000                   |
+| PORT            | Puerto externo del servidor         | 3000                   |
+| INTERNAL_PORT   | Puerto interno del servidor         | 3000                   |
 | NODE_ENV        | Entorno (development/production)    | development            |
 | DATABASE_HOST   | Host de PostgreSQL                  | postgres               |
-| DATABASE_PORT   | Puerto de PostgreSQL                | 5432                   |
+| DATABASE_PORT   | Puerto externo de PostgreSQL        | 5432                   |
+| DATABASE_INTERNAL_PORT | Puerto interno de PostgreSQL | 5432                   |
 | DATABASE_USER   | Usuario de PostgreSQL               | postgres               |
 | DATABASE_PASSWORD | Contraseña de PostgreSQL          | postgres               |
 | DATABASE_NAME   | Nombre de la base de datos          | central_control        |

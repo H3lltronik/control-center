@@ -84,9 +84,11 @@ This application implements several security measures:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| PORT | The port the server runs on | 3000 |
+| PORT | The external port the server is exposed on | 3000 |
+| INTERNAL_PORT | The internal port the server runs on | 3000 |
 | DATABASE_HOST | PostgreSQL host | postgres |
-| DATABASE_PORT | PostgreSQL port | 5432 |
+| DATABASE_PORT | External PostgreSQL port | 5432 |
+| DATABASE_INTERNAL_PORT | Internal PostgreSQL port | 5432 |
 | DATABASE_USER | PostgreSQL username | postgres |
 | DATABASE_PASSWORD | PostgreSQL password | postgres |
 | DATABASE_NAME | PostgreSQL database name | central_control |

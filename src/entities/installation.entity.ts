@@ -3,12 +3,14 @@ import {
   Entity,
   Generated,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   type Relation,
 } from "typeorm";
 
 import { TimestampsEntity } from "../common/timestamps-entity";
 import { Customer } from "./customer.entity";
+import { Log } from "./log.entity";
 
 @Entity("installations")
 export class Installation extends TimestampsEntity {
@@ -24,4 +26,7 @@ export class Installation extends TimestampsEntity {
 
   @ManyToOne(() => Customer, customer => customer.installations)
   customer!: Relation<Customer>;
+
+  @OneToMany(() => Log, log => log.installation)
+  logs!: Relation<Log[]>;
 }

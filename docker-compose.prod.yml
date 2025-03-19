@@ -7,9 +7,9 @@ services:
       target: production
       context: .
       args:
-        - PORT=${PORT:-3000}
+        - PORT=${INTERNAL_PORT:-3000}
     ports:
-      - "${PORT:-3000}:${PORT:-3000}"
+      - "${PORT:-3000}:${INTERNAL_PORT:-3000}"
     deploy:
       resources:
         limits:
@@ -24,7 +24,7 @@ services:
     env_file: .env
     environment:
       - DATABASE_HOST=postgres-production
-      - DATABASE_PORT=5432
+      - DATABASE_PORT=${DATABASE_PORT:-5432}
       - NODE_ENV=production
 
   postgres-production:
@@ -32,7 +32,7 @@ services:
     container_name: central-control-postgres-production
     restart: always
     ports:
-      - "5433:5432"
+      - "${DATABASE_PORT:-5433}:${DATABASE_INTERNAL_PORT:-5432}"
     environment:
       - POSTGRES_USER=${DATABASE_USER:-postgres}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-postgres}

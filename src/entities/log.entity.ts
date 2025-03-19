@@ -3,10 +3,13 @@ import {
   Entity,
   Generated,
   Index,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
 
 import { TimestampsEntity } from "../common/timestamps-entity";
+import { Installation } from "./installation.entity";
 
 export enum LogLevel {
   DEBUG = "debug",
@@ -31,9 +34,9 @@ export class Log extends TimestampsEntity {
   @Generated("uuid")
   uuid!: string;
 
-  @Column()
+  @ManyToOne(() => Installation)
   @Index()
-  installationId!: string;
+  installation!: Relation<Installation>;
 
   @Column({
     type: "enum",

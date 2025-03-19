@@ -9,9 +9,9 @@ services:
       target: dev
       context: .
       args:
-        - PORT=${PORT:-3000}
+        - PORT=${INTERNAL_PORT:-3000}
     ports:
-      - "${PORT:-3000}:${PORT:-3000}"
+      - "${PORT:-3000}:${INTERNAL_PORT:-3000}"
       - "9229:9229"
     volumes:
       - ./src:/app/src
@@ -27,7 +27,7 @@ services:
       - postgres
     environment:
       - DATABASE_HOST=postgres
-      - DATABASE_PORT=5432
+      - DATABASE_PORT=${DATABASE_PORT:-5432}
       - NODE_ENV=development
     command: npm run dev
 
@@ -36,7 +36,7 @@ services:
     container_name: central-control-postgres
     restart: always
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT:-5432}:${DATABASE_INTERNAL_PORT:-5432}"
     environment:
       - POSTGRES_USER=${DATABASE_USER:-postgres}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-postgres}

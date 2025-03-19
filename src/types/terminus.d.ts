@@ -33,5 +33,6 @@ declare module "@nestjs/terminus" {
 
   export function HealthCheck(): MethodDecorator;
 
-  export const TerminusModule: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export const TerminusModule: any;
 }

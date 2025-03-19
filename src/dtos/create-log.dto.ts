@@ -4,16 +4,11 @@ import {
   IsObject,
   IsOptional,
   IsString,
-  IsUUID,
 } from "class-validator";
 
 import { LogLevel, LogSource } from "../entities/log.entity";
 
 export class CreateLogDto {
-  @IsNotEmpty()
-  @IsUUID()
-  installationId!: string;
-
   @IsEnum(LogLevel)
   @IsOptional()
   level?: LogLevel;

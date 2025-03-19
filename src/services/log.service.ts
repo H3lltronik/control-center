@@ -8,7 +8,10 @@ import { LogRepository } from "../repositories/log.repository";
 export class LogService {
   constructor(private logRepository: LogRepository) {}
 
-  async create(createLogDto: CreateLogDto): Promise<Log> {
-    return this.logRepository.create(createLogDto);
+  async create(
+    createLogDto: CreateLogDto,
+    installationId: string,
+  ): Promise<Log> {
+    return this.logRepository.create(createLogDto, installationId);
   }
 }

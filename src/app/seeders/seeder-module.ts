@@ -9,7 +9,11 @@ import { ApiKeyLogEntity } from "../data/api-keys/api-key-log.entity";
 import { CustomerEntity } from "../data/customers/customer.entity";
 import { InstallationEntity } from "../data/installations/installation.entity";
 import { LogEntity } from "../data/logs/log.entity";
+import { ApiKeyGeneratorService } from "./api-key-generator.service";
 import { CleanCommand } from "./commands/clean.command";
+import { GenerateApiKeyCommand } from "./commands/generate-api-key.command";
+import { ListApiKeysCommand } from "./commands/list-api-keys.command";
+import { ListInstallationsCommand } from "./commands/list-installations.command";
 import { ResetCommand } from "./commands/reset.command";
 import { SeedCommand } from "./commands/seed.command";
 import { CustomerSeederService } from "./customer-seeder.service";
@@ -42,10 +46,14 @@ import { SeedersService } from "./seeders.service";
   providers: [
     CustomerSeederService,
     InstallationSeederService,
+    ApiKeyGeneratorService,
     SeedersService,
     SeedCommand,
     CleanCommand,
     ResetCommand,
+    GenerateApiKeyCommand,
+    ListInstallationsCommand,
+    ListApiKeysCommand,
   ],
 })
 export class SeederModule implements OnModuleInit {

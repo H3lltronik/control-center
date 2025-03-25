@@ -14,9 +14,23 @@ export class LogService {
     private readonly queryBus: QueryBus,
   ) {}
 
-  async create(createLogDto: CreateLogDto): Promise<LogEntity> {
+  async create(
+    createLogDto: CreateLogDto,
+    installationId: string,
+  ): Promise<LogEntity> {
     return await this.commandBus.execute<CreateLogCommand, LogEntity>(
-      new CreateLogCommand(createLogDto),
+      new CreateLogCommand({
+        content: createLogDto.content,
+        level: createLogDto.level,
+        metadata: createLogDto.metadata,
+        path: createLogDto.path,
+        source: createLogDto.source,
+        userId: createLogDto.userId,
+        userAgent: createLogDto.userAgent,
+        ipAddress: createLogDto.ipAddress,
+        stackTrace: createLogDto.stackTrace,
+        installationId,
+      }),
     );
   }
 

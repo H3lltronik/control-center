@@ -16,9 +16,12 @@ export class ApiKeyRepository {
     return this.repository.save(apiKey);
   }
 
-  async findByKey(key: string): Promise<ApiKeyEntity | null> {
+  async findByKeyAndInstallation(
+    key: string,
+    installationUuid: string,
+  ): Promise<ApiKeyEntity | null> {
     return this.repository.findOne({
-      where: { key },
+      where: { key, installationUuid },
       relations: ["installation"],
     });
   }
@@ -61,7 +64,7 @@ export class ApiKeyRepository {
   async incrementRequestCount(uuid: string): Promise<void> {
     await this.repository.update(
       { uuid },
-      { requestCount: () => "request_count + 1" },
+      { requestCount: () => "requestCount + 1" },
     );
   }
 

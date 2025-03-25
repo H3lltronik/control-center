@@ -16,4 +16,4 @@ export class SeedCommand extends CommandRunner {
   async run(): Promise<void> {
     await this.seedersService.seed();
   }
-} 
+}

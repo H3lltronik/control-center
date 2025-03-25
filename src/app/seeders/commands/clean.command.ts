@@ -19,4 +19,4 @@ export class CleanCommand extends CommandRunner {
   async run(): Promise<void> {
     await this.seedersService.clean();
   }
-} 
+}

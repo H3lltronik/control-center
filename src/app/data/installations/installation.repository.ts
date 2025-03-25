@@ -23,4 +23,8 @@ export class InstallationRepository {
   async findByUuid(uuid: string): Promise<InstallationEntity | null> {
     return this.repository.findOne({ where: { uuid } });
   }
+
+  async findById(id: string): Promise<InstallationEntity | null> {
+    return this.repository.findOne({ where: { id } });
+  }
 }

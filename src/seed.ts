@@ -7,7 +7,7 @@ import { SeederModule } from "./app/seeders/seeder-module";
 async function bootstrap(): Promise<void> {
   // Cargamos las variables de entorno desde .env.seeder
   config({ path: ".env.seeder" });
-  
+
   await CommandFactory.run(SeederModule, {
     logger: new Logger(),
     errorHandler: (error: Error) => {

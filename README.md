@@ -8,6 +8,7 @@ Central Control is a monitoring and tracking application for client installation
 - Collect and store logs from various client applications
 - Secure API with CORS protection and IP whitelisting
 - Health monitoring endpoints
+- API key management for secure access to the API
 
 ## Tech Stack
 
@@ -64,6 +65,58 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 docker-compose down
 ```
 
+## API Keys Management
+
+The system provides commands to manage API keys for secure access to the API endpoints. You can generate, list, and manage API keys for different installations.
+
+### Available Commands
+
+Run these commands with `npx tsx src/seed.ts <command>`:
+
+- `list-installations` - List all available installations with their UUIDs
+- `generate-api-key` - Generate a new API key for a specific installation
+- `list-api-keys` - List all existing API keys
+
+### Generating a New API Key
+
+To generate a new API key, use the following command:
+
+```bash
+npx tsx src/seed.ts generate-api-key -i <installation-uuid> -n "Key Name" -d "Key Description" --days 30 --permission READ
+```
+
+Options:
+- `-i, --installation <uuid>` - Installation UUID (required)
+- `-n, --name <name>` - API key name (required)
+- `-d, --description <description>` - Description of what the key is used for
+- `--days <number>` - Number of days until expiration (if not set, the key never expires)
+- `--rate-limit <number>` - Rate limit in requests per minute (default: 300)
+- `--permission <permission>` - Key permission level: READ, WRITE, or ADMIN (default: READ)
+
+### List All Installations
+
+To get a list of all available installations and their UUIDs:
+
+```bash
+npx tsx src/seed.ts list-installations
+```
+
+### List All API Keys
+
+To view all existing API keys:
+
+```bash
+npx tsx src/seed.ts list-api-keys
+```
+
+### Using API Keys in Requests
+
+When making requests to secured endpoints, include the API key in the Authorization header:
+
+```bash
+curl -X POST -H "Authorization: ApiKey YOUR_API_KEY" http://localhost:3000/api/endpoint
+```
+
 ## API Endpoints
 
 - `POST /api/logs` - Create a new log entry
@@ -79,6 +132,7 @@ This application implements several security measures:
 - CORS protection with origin whitelisting
 - Input validation using class-validator
 - TypeORM for SQL injection protection
+- API key authentication for protected endpoints
 
 ## Environment Variables
 

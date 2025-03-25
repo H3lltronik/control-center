@@ -12,7 +12,7 @@ services:
         - PORT=${INTERNAL_PORT:-3000}
     ports:
       - "${PORT:-3000}:${INTERNAL_PORT:-3000}"
-      - "9229:9229"
+      - "9249:9229"
     volumes:
       - ./src:/app/src
     deploy:

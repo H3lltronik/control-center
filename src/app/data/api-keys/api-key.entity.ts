@@ -43,11 +43,11 @@ export class ApiKeyEntity extends TimestampsEntity {
   @Column({ type: "timestamp", nullable: true })
   expiresAt?: Date;
 
-  @Column({ type: "uuid", nullable: true })
-  installationUuid?: string;
+  @Column({ type: "uuid", name: "installation_uuid" })
+  installationUuid!: string;
 
   @ManyToOne(() => InstallationEntity, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "installation_uuid" })
+  @JoinColumn({ name: "installation_uuid", referencedColumnName: "id" })
   installation?: Relation<InstallationEntity>;
 
   @OneToMany(

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Headers, Post, Query } from "@nestjs/common";
 
 import { LogService } from "../../core/logs/log.service";
 import { LogEntity } from "../../data/logs/log.entity";
@@ -10,8 +10,11 @@ export class LogsController {
   constructor(private readonly logService: LogService) {}
 
   @Post()
-  async create(@Body() createLogDto: CreateLogDto): Promise<LogEntity> {
-    return this.logService.create(createLogDto);
+  create(
+    @Body() createLogDto: CreateLogDto,
+    @Headers("x-installation-id") installationId: string,
+  ): Promise<LogEntity> {
+    return this.logService.create(createLogDto, installationId);
   }
 
   @Get()

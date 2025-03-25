@@ -125,7 +125,7 @@ export class ApiKeyService {
    */
   async validateApiKey(
     key: string,
-    installationUuid?: string,
+    installationUuid: string,
     requiredPermission: ApiKeyPermission = ApiKeyPermission.READ,
     requestContext?: RequestContext,
   ): Promise<{
@@ -145,7 +145,10 @@ export class ApiKeyService {
 
     try {
       // Buscar la API Key
-      const apiKey = await this.apiKeyRepository.findByKey(key);
+      const apiKey = await this.apiKeyRepository.findByKeyAndInstallation(
+        key,
+        installationUuid,
+      );
 
       if (!apiKey) {
         await this.logFailedValidation(

@@ -16,4 +16,4 @@ export class ResetCommand extends CommandRunner {
   async run(): Promise<void> {
     await this.seedersService.reset();
   }
-} 
+}

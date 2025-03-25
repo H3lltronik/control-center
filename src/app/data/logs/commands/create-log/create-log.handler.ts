@@ -23,7 +23,7 @@ export class CreateLogHandler implements ICommandHandler<CreateLogCommand> {
 
     if (installationId) {
       const installation =
-        await this.installationRepository.findByUuid(installationId);
+        await this.installationRepository.findById(installationId);
 
       if (!installation) {
         throw new NotFoundException(

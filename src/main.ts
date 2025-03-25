@@ -11,9 +11,13 @@ import { AppModule } from "./app/app.module";
 import { SecurityService } from "./app/core/security/security.service";
 
 async function bootstrap() {
+  const logger = new Logger("Bootstrap");
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    {
+      logger: ["error", "warn", "log", "debug", "verbose"],
+    },
   );
 
   // Set up global validation pipe
@@ -40,7 +44,6 @@ async function bootstrap() {
 
   await app.listen(port, "0.0.0.0");
 
-  const logger = app.get(Logger);
   logger.log(`Central Control is ready and listening on port ${port} 🚀`);
 }
 

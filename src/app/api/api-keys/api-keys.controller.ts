@@ -23,7 +23,7 @@ export class ApiKeysController {
   @Post("validate")
   async validateApiKey(
     @Body() body: ValidateApiKeyDto,
-    @Headers("x-installation-id") installationId?: string,
+    @Headers("x-installation-id") installationId: string,
     @Headers("x-required-permission") requiredPermission?: string,
     @Ip() ip?: string,
     @Req() request?: Request,

@@ -1,25 +1,20 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { CqrsModule } from "@nestjs/cqrs";
 
 import { DatabaseModule } from "../common/database.module";
-import { LoggerModule } from "../common/logger.module";
-import { SecurityService } from "../common/security.service";
-import { CustomerModule } from "../modules/customer.module";
-import { HealthModule } from "../modules/health.module";
-import { InstallationModule } from "../modules/installation.module";
-import { LogModule } from "../modules/log.module";
+import { ApiModule } from "./api/api.module";
+import { CoreModule } from "./core/core.module";
+import { DataModule } from "./data/data.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, cache: true }),
-    LoggerModule,
     DatabaseModule,
-    CustomerModule,
-    InstallationModule,
-    LogModule,
-    HealthModule,
+    CqrsModule,
+    CoreModule,
+    DataModule,
+    ApiModule,
   ],
-  providers: [SecurityService],
-  exports: [SecurityService],
 })
 export class AppModule {}

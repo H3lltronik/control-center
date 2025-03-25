@@ -17,11 +17,11 @@ export class Installation extends TimestampsEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column()
+  @Column({ type: "uuid" })
   @Generated("uuid")
   uuid!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 255 })
   productName!: string;
 
   @ManyToOne(() => Customer, customer => customer.installations)

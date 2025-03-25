@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { ApiKey } from "../entities/api-key.entity";
 import { Customer } from "../entities/customer.entity";
 import { Installation } from "../entities/installation.entity";
 import { Log } from "../entities/log.entity";
@@ -18,7 +19,7 @@ import { Log } from "../entities/log.entity";
         username: configService.get<string>("DATABASE_USER", "postgres"),
         password: configService.get<string>("DATABASE_PASSWORD", "postgres"),
         database: configService.get<string>("DATABASE_NAME", "central_control"),
-        entities: [Customer, Installation, Log],
+        entities: [ApiKey, Customer, Installation, Log],
         synchronize: configService.get<boolean>("DATABASE_SYNC", false),
         logging: configService.get<string>("NODE_ENV") === "development",
       }),

@@ -15,23 +15,23 @@ export class Customer extends TimestampsEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column()
+  @Column({ type: "uuid" })
   @Generated("uuid")
   uuid!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 255 })
   fullName!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 255 })
   email!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 50 })
   phone!: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", length: 255, nullable: true })
   company?: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", length: 255, nullable: true })
   address?: string;
 
   @OneToMany(() => Installation, installation => installation.customer)

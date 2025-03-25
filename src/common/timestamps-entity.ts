@@ -1,12 +1,12 @@
 import { Column, DeleteDateColumn } from "typeorm";
 
 export abstract class TimestampsEntity {
-  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt!: Date;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updatedAt!: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: "timestamp" })
   deletedAt?: Date;
 }

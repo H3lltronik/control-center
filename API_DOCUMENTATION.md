@@ -284,4 +284,93 @@ La aplicación puede ejecutarse tanto en modo desarrollo como producción usando
 - En modo producción, la API solo permite conexiones desde los orígenes especificados en `ALLOWED_ORIGINS`.
 - Se permiten métodos GET, POST y OPTIONS (necesario para preflight CORS).
 - La API incluye cabeceras de seguridad configuradas por Helmet.
-- No se incluyen endpoints para recuperar o eliminar datos, solo para registrarlos, siguiendo el patrón de diseño de un sistema de logging centralizado. 
+- No se incluyen endpoints para recuperar o eliminar datos, solo para registrarlos, siguiendo el patrón de diseño de un sistema de logging centralizado.
+
+## API Endpoints
+
+### Health Check
+- `GET /api/health` - Check if the service is up and running
+
+### Customers
+- `GET /api/customers` - Get all customers
+- `GET /api/customers/:uuid` - Get a customer by UUID
+- `POST /api/customers` - Create a new customer
+- `PATCH /api/customers/:uuid` - Update a customer
+- `DELETE /api/customers/:uuid` - Delete a customer
+
+### Installations
+- `GET /api/installations` - Get all installations
+- `GET /api/installations/:uuid` - Get an installation by UUID
+- `POST /api/installations` - Create a new installation
+- `PATCH /api/installations/:uuid` - Update an installation
+- `DELETE /api/installations/:uuid` - Delete an installation
+
+### Logs
+- `GET /api/logs` - Get all logs
+- `GET /api/logs/:uuid` - Get a log by UUID
+- `POST /api/logs` - Create a new log
+- `PATCH /api/logs/:uuid` - Update a log
+- `DELETE /api/logs/:uuid` - Delete a log
+
+### API Keys
+- `GET /api/api-keys` - Get all API keys
+- `GET /api/api-keys/:uuid` - Get an API key by UUID
+- `POST /api/api-keys/verify` - Verify an API key
+
+## API Key Management
+
+### API Key Model
+```json
+{
+  "uuid": "string",
+  "name": "string",
+  "key": "string",
+  "allowedSystems": ["string"],
+  "isActive": true,
+  "lastUsedAt": "2023-01-01T00:00:00.000Z",
+  "expiresAt": "2023-12-31T23:59:59.999Z",
+  "createdAt": "2023-01-01T00:00:00.000Z",
+  "metadata": {}
+}
+```
+
+### Verify API Key
+**Endpoint:** `POST /api/api-keys/verify`
+
+**Request Body:**
+```json
+{
+  "key": "f7d8e45a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e",
+  "system": "checklist-system"
+}
+```
+
+**Response:**
+```json
+{
+  "isValid": true,
+  "uuid": "123e4567-e89b-12d3-a456-426614174000",
+  "metadata": {
+    "description": "Used by AWS Lambda to communicate with Checklist System",
+    "owner": "DevOps Team"
+  }
+}
+```
+
+### Integration Flow
+1. Create an API key manually in the database for the AWS Lambda integration
+2. Configure the AWS Lambda with the API key
+3. When the Lambda needs to communicate with Checklist System:
+   - Lambda sends a request to Checklist System with the API key
+   - Checklist System sends a verification request to Control Center
+   - Control Center verifies the API key and returns the result
+   - If valid, Checklist System processes the request
+
+### Manual API Key Creation
+For security reasons, API keys are created manually by an administrator. The following fields need to be set:
+- `name`: A descriptive name for the integration (e.g., "AWS Lambda Integration")
+- `key`: A cryptographically secure random string (suggested: 64-character hex string)
+- `allowedSystems`: Array of system identifiers that this key can access (e.g., ["checklist-system"])
+- `isActive`: Boolean indicating if the key is active (default: true)
+- `expiresAt`: Optional expiration date
+- `metadata`: Optional JSON object with additional information about the integration 

@@ -30,7 +30,7 @@ export class Log extends TimestampsEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column()
+  @Column({ type: "uuid" })
   @Generated("uuid")
   uuid!: string;
 
@@ -54,11 +54,11 @@ export class Log extends TimestampsEntity {
   @Index()
   source!: LogSource;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", length: 255, nullable: true })
   @Index()
   userId?: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", length: 255, nullable: true })
   @Index()
   path?: string;
 
@@ -68,10 +68,10 @@ export class Log extends TimestampsEntity {
   @Column({ type: "jsonb", nullable: true })
   metadata?: Record<string, unknown>;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", length: 255, nullable: true })
   userAgent?: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", length: 100, nullable: true })
   ipAddress?: string;
 
   @Column({ type: "text", nullable: true })

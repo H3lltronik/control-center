@@ -39,24 +39,32 @@
     "lint:file": "eslint --ignore-path .gitignore",
     "lint:yaml": "chmod +x scripts/lint_yaml.sh && ./scripts/lint_yaml.sh",
     "build:clean": "rimraf dist; exit 0",
-    "typos": "chmod +x scripts/check_typos.sh && ./scripts/check_typos.sh"
+    "typos": "chmod +x scripts/check_typos.sh && ./scripts/check_typos.sh",
+    "typeorm": "npm run build && tsx -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d dist/typeorm.config.js",
+    "migration:generate": "npm run typeorm -- migration:generate src/migrations/",
+    "migration:create": "npm run typeorm -- migration:create src/migrations/",
+    "migration:run": "npm run typeorm -- migration:run",
+    "migration:revert": "npm run typeorm -- migration:revert",
+    "db:init": "cp -n .env.example .env.migration || true && npm run migration:run",
+    "db:reset": "npm run typeorm -- schema:drop && npm run migration:run"
   },
   "dependencies": {
+    "@fastify/helmet": "^11.1.1",
     "@nestjs/cli": "^10.4.5",
     "@nestjs/common": "^10.4.6",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.4.6",
     "@nestjs/cqrs": "^10.2.7",
     "@nestjs/platform-fastify": "^10.4.6",
+    "@nestjs/terminus": "^10.2.0",
     "@nestjs/typeorm": "^10.0.2",
-    "@fastify/helmet": "^11.1.1",
-    "pg": "^8.11.3",
-    "typeorm": "^0.3.20",
-    "class-validator": "^0.14.1",
     "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "dotenv": "^16.4.7",
+    "pg": "^8.11.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "@nestjs/terminus": "^10.2.0"
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
@@ -68,6 +76,7 @@
     "@swc/core": "^1.7.42",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.7",
+    "@types/pg": "^8.11.0",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
@@ -97,8 +106,7 @@
     "unplugin-swc": "^1.5.1",
     "vite": "^5.4.10",
     "vitest": "^2.1.0",
-    "vitest-mock-extended": "^1.3.1",
-    "@types/pg": "^8.11.0"
+    "vitest-mock-extended": "^1.3.1"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.24.3",

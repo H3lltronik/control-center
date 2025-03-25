@@ -2,6 +2,9 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { ApiKeyEntity } from "../app/data/api-keys/api-key.entity";
+import { ApiKeyInstallationEntity } from "../app/data/api-keys/api-key-installation.entity";
+import { ApiKeyLogEntity } from "../app/data/api-keys/api-key-log.entity";
 import { CustomerEntity } from "../app/data/customers/customer.entity";
 import { InstallationEntity } from "../app/data/installations/installation.entity";
 import { LogEntity } from "../app/data/logs/log.entity";
@@ -14,7 +17,7 @@ import { LogEntity } from "../app/data/logs/log.entity";
       useFactory: (configService: ConfigService) => {
         const isProduction = configService.get("NODE_ENV") === "production";
         const isDevelopment = configService.get("NODE_ENV") === "development";
-        
+
         return {
           type: "postgres",
           host: configService.get("DB_HOST", "localhost"),
@@ -22,8 +25,16 @@ import { LogEntity } from "../app/data/logs/log.entity";
           username: configService.get("DB_USERNAME", "postgres"),
           password: configService.get("DB_PASSWORD", "postgres"),
           database: configService.get("DB_NAME", "postgres"),
-          entities: [CustomerEntity, InstallationEntity, LogEntity],
-          synchronize: isDevelopment && configService.get("DB_SYNC", "false") === "true",
+          entities: [
+            CustomerEntity,
+            InstallationEntity,
+            LogEntity,
+            ApiKeyEntity,
+            ApiKeyInstallationEntity,
+            ApiKeyLogEntity,
+          ],
+          synchronize:
+            isDevelopment && configService.get("DB_SYNC", "false") === "true",
           migrationsRun: isProduction,
           autoLoadEntities: false,
           ssl:

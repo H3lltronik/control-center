@@ -1,5 +1,6 @@
-import { config } from "dotenv";
 import path from "node:path";
+
+import { config } from "dotenv";
 import { DataSource, DataSourceOptions } from "typeorm";
 
 // Carga el archivo .env.migration si existe
@@ -20,8 +21,7 @@ const options: DataSourceOptions = {
   ssl:
     process.env.DB_SSL === "true"
       ? {
-          rejectUnauthorized:
-            process.env.DB_REJECT_UNAUTHORIZED === "true",
+          rejectUnauthorized: process.env.DB_REJECT_UNAUTHORIZED === "true",
         }
       : false,
 };
@@ -37,4 +37,4 @@ if (finalOptions.host === "postgres" && !process.env.DOCKER_ENV) {
   finalOptions.host = "localhost";
 }
 
-export default new DataSource(finalOptions); 
+export default new DataSource(finalOptions);

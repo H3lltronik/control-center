@@ -263,3 +263,20 @@ And for trying to fix lint issues automatically, you can run:
 ```bash
 node --run lint:fix
 ```
+
+## 🔑 API Keys Management
+
+This service includes a secure API Key system for authenticating API clients. The API keys are associated with installations and can be easily managed via API endpoints.
+
+### API Key Validation
+
+The system includes an API endpoint `/api/api-keys/validate` for validating API keys. This endpoint can be used by other services to verify API key validity.
+
+### Security Measures
+
+The API Key system implements several security best practices:
+- Keys follow a secure format with prefix and random bytes
+- All keys are stored securely in the database with proper relations
+- API Keys can expire and be revoked
+- Tracking of last usage
+- Support for key rotation and management

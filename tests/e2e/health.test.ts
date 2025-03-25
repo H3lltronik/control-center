@@ -6,28 +6,20 @@ import { Test, TestingModule } from "@nestjs/testing";
 import * as nock from "nock";
 import request from "supertest";
 
-import { HealthApiModule } from "@/app/api/health/health-api.module";
-import { HealthCheckService } from "@nestjs/terminus";
-import { createMock } from "@/tests/utils/mock";
+import { AppModule } from "@/app/app.module";
 
 // Interface para extender los tipos de FastifyInstance
 interface FastifyInstanceWithReady {
   ready: () => Promise<void>;
 }
 
-// Skip e2e tests in this refactoring
-describe.skip("Health", () => {
+describe("Health", () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [HealthApiModule],
-    })
-      .overrideProvider(HealthCheckService)
-      .useValue(createMock<HealthCheckService>({
-        check: jest.fn().mockResolvedValue({ status: "ok" }),
-      }))
-      .compile();
+      imports: [AppModule],
+    }).compile();
 
     app = moduleFixture.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
@@ -49,7 +41,7 @@ describe.skip("Health", () => {
   });
 
   afterAll(async () => {
-    await app?.close();
+    await app.close();
     nock.enableNetConnect();
   });
 

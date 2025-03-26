@@ -34,7 +34,7 @@ export class GenerateApiKeyCommand extends CommandRunner {
       options;
 
     if (!installation) {
-      console.error("Installation UUID is required");
+      console.error("Installation ID is required");
       return;
     }
 
@@ -74,8 +74,8 @@ export class GenerateApiKeyCommand extends CommandRunner {
   }
 
   @Option({
-    flags: "-i, --installation <uuid>",
-    description: "Installation UUID",
+    flags: "-i, --installation <id>",
+    description: "Installation ID",
     required: true,
   })
   parseInstallation(val: string): string {

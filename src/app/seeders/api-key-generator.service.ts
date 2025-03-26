@@ -28,7 +28,7 @@ export class ApiKeyGeneratorService {
    * Genera una API key para una instalación específica
    */
   async generateApiKey(
-    installationUuid: string,
+    installationId: string,
     name: string,
     description?: string,
     expiresInDays?: number,
@@ -37,11 +37,11 @@ export class ApiKeyGeneratorService {
   ): Promise<ApiKeyEntity> {
     // Verificar que la instalación existe
     const installation = await this.installationRepository.findOne({
-      where: { uuid: installationUuid },
+      where: { id: installationId },
     });
 
     if (!installation) {
-      throw new Error(`Installation with UUID ${installationUuid} not found`);
+      throw new Error(`Installation with ID ${installationId} not found`);
     }
 
     this.logger.log(

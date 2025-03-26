@@ -35,13 +35,13 @@ export class ListInstallationsCommand extends CommandRunner {
         "============================================================",
       );
       console.log(
-        "UUID                                  | PRODUCT NAME | CUSTOMER",
+        "ID                                  | PRODUCT NAME | CUSTOMER",
       );
       console.log("----------------------------------------------------------");
 
       for (const installation of installations) {
         console.log(
-          `${installation.uuid} | ${installation.productName.padEnd(
+          `${installation.id} | ${installation.productName.padEnd(
             12,
           )} | ${installation.customer.name}`,
         );

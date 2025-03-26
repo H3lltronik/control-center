@@ -1,5 +1,5 @@
-import { Module, OnModuleInit } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
+import { Inject, Logger, Module, OnModuleInit } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { DatabaseModule } from "../../common/database.module";
@@ -57,10 +57,25 @@ import { SeedersService } from "./seeders.service";
   ],
 })
 export class SeederModule implements OnModuleInit {
-  /**
-   * Este método se ejecuta cuando el módulo se inicializa
-   */
-  onModuleInit(): void {
-    // Evitar el error de clase vacía
+  private readonly logger = new Logger(SeederModule.name);
+  
+  constructor(@Inject(ConfigService) private readonly configService: ConfigService) {}
+  
+  onModuleInit() {
+    // Mostrar información de las variables de entorno al iniciar
+    this.logger.log('==========================================');
+    this.logger.log('Iniciando aplicación con las siguientes configuraciones:');
+    this.logger.log(`NODE_ENV: ${this.configService.get('NODE_ENV', 'no definido')}`);
+    this.logger.log(`DB_HOST: ${this.configService.get('DB_HOST', 'no definido')}`);
+    this.logger.log(`DB_PORT: ${this.configService.get('DB_PORT', 'no definido')}`);
+    
+    // Información adicional que podría ser útil pero sin exponer datos sensibles
+    const dbName = this.configService.get('DATABASE_NAME');
+    if (dbName) this.logger.log(`DATABASE_NAME: ${dbName}`);
+    
+    // Verificar modo de ejecución
+    const isDevMode = this.configService.get('NODE_ENV') === 'development';
+    this.logger.log(`Modo: ${isDevMode ? 'Desarrollo' : 'Producción'}`);
+    this.logger.log('==========================================');
   }
 }

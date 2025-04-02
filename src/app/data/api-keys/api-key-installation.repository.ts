@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
@@ -9,6 +9,8 @@ import {
 
 @Injectable()
 export class ApiKeyInstallationRepository {
+  private readonly logger = new Logger(ApiKeyInstallationRepository.name);
+
   constructor(
     @InjectRepository(ApiKeyInstallationEntity)
     private readonly repository: Repository<ApiKeyInstallationEntity>,
@@ -23,12 +25,17 @@ export class ApiKeyInstallationRepository {
     permission: ApiKeyPermission;
     rateLimit?: number;
   }): Promise<ApiKeyInstallationEntity> {
+    this.logger.log(`Creating API key installation: ${JSON.stringify(data)}`);
     const apiKeyInstallation = this.repository.create({
       apiKeyUuid: data.apiKeyUuid,
       installationUuid: data.installationUuid,
       permission: data.permission,
       rateLimit: data.rateLimit ?? 100, // Default: 100 RPM
     });
+
+    this.logger.log(
+      `API key installation created: ${JSON.stringify(apiKeyInstallation)}`,
+    );
 
     return this.repository.save(apiKeyInstallation);
   }
@@ -37,6 +44,7 @@ export class ApiKeyInstallationRepository {
    * Encuentra una relación por su UUID
    */
   async findById(uuid: string): Promise<ApiKeyInstallationEntity | null> {
+    this.logger.log(`Finding API key installation by uuid: ${uuid}`);
     return this.repository.findOne({
       where: { uuid },
       relations: ["apiKey", "installation"],
@@ -50,6 +58,9 @@ export class ApiKeyInstallationRepository {
     apiKeyUuid: string,
     installationUuid: string,
   ): Promise<ApiKeyInstallationEntity | null> {
+    this.logger.log(
+      `Finding API key installation by apiKeyUuid: ${apiKeyUuid} and installationUuid: ${installationUuid}`,
+    );
     return this.repository.findOne({
       where: {
         apiKeyUuid,
@@ -66,6 +77,9 @@ export class ApiKeyInstallationRepository {
     uuid: string,
     permission: ApiKeyPermission,
   ): Promise<void> {
+    this.logger.log(
+      `Updating permission for API key installation: ${uuid} to ${permission}`,
+    );
     await this.repository.update(uuid, { permission });
   }
 
@@ -73,6 +87,7 @@ export class ApiKeyInstallationRepository {
    * Elimina una relación
    */
   async delete(uuid: string): Promise<void> {
+    this.logger.log(`Deleting API key installation: ${uuid}`);
     await this.repository.delete(uuid);
   }
 
@@ -80,6 +95,9 @@ export class ApiKeyInstallationRepository {
    * Incrementa el contador de peticiones y actualiza la fecha de último uso
    */
   async updateRequestCount(uuid: string): Promise<void> {
+    this.logger.log(
+      `Incrementing request count for API key installation: ${uuid}`,
+    );
     await this.repository.increment({ uuid }, "requestCount", 1);
     await this.repository.update(uuid, { lastUsedAt: new Date() });
   }
@@ -88,6 +106,9 @@ export class ApiKeyInstallationRepository {
    * Reinicia el contador de peticiones
    */
   async resetRequestCount(uuid: string): Promise<void> {
+    this.logger.log(
+      `Resetting request count for API key installation: ${uuid}`,
+    );
     await this.repository.update(uuid, { requestCount: 0 });
   }
 }

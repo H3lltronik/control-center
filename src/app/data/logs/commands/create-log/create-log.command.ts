@@ -1,5 +1,8 @@
+import { ICommand } from "@nestjs/cqrs";
+
 import { LogLevel, LogSource } from "../../log.entity";
-export class CreateLogCommand {
+
+export class CreateLogCommand implements ICommand {
   constructor(
     public readonly data: {
       level?: LogLevel;

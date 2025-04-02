@@ -3,8 +3,8 @@ import inquirer from "inquirer";
 import { Command, CommandRunner } from "nest-commander";
 
 import { ApiKeyPermission } from "../../app/data/api-keys/api-key-installation.entity";
-import { ToolingApiKeyService } from "../services/tooling-api-key.service";
 import { EnvironmentInfoService } from "../services/environment-info.service";
+import { ToolingApiKeyService } from "../services/tooling-api-key.service";
 import { ToolingInstallationService } from "../services/tooling-installation.service";
 
 enum MainMenuOptions {

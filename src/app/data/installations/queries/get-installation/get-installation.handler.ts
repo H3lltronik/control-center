@@ -1,4 +1,5 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import { InjectRepository } from "@nestjs/typeorm";
 
 import { InstallationEntity } from "../../installation.entity";
 import { InstallationRepository } from "../../installation.repository";
@@ -9,6 +10,7 @@ export class GetInstallationByUuidHandler
   implements IQueryHandler<GetInstallationByUuidQuery>
 {
   constructor(
+    @InjectRepository(InstallationEntity)
     private readonly installationRepository: InstallationRepository,
   ) {}
 

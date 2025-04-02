@@ -2,6 +2,7 @@ import * as crypto from "node:crypto";
 
 import {
   BadRequestException,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -32,9 +33,13 @@ export class ApiKeyService {
   private readonly logger = new Logger(ApiKeyService.name);
 
   constructor(
+    @Inject(ApiKeyRepository)
     private readonly apiKeyRepository: ApiKeyRepository,
+    @Inject(InstallationRepository)
     private readonly installationRepository: InstallationRepository,
+    @Inject(ApiKeyInstallationRepository)
     private readonly apiKeyInstallationRepository: ApiKeyInstallationRepository,
+    @Inject(ApiKeyLogRepository)
     private readonly apiKeyLogRepository: ApiKeyLogRepository,
   ) {}
 
@@ -55,7 +60,7 @@ export class ApiKeyService {
   async createApiKey(data: {
     name: string;
     description?: string;
-    installationUuid?: string;
+    installationId?: string;
     expiresAt?: Date;
     createdBy?: string;
     metadata?: Record<string, unknown>;
@@ -64,15 +69,17 @@ export class ApiKeyService {
     requestContext?: RequestContext;
   }): Promise<{ apiKey: ApiKeyEntity; secretKey: string }> {
     // Verificar installation si se proporcionó
-    if (data.installationUuid) {
-      const installation = await this.installationRepository.findByUuid(
-        data.installationUuid,
+    if (!data.installationId) {
+      throw new BadRequestException("Installation ID is required");
+    }
+
+    const installation = await this.installationRepository.findById(
+      data.installationId,
+    );
+    if (!installation) {
+      throw new NotFoundException(
+        `Installation with ID ${data.installationId} not found`,
       );
-      if (!installation) {
-        throw new NotFoundException(
-          `Installation with UUID ${data.installationUuid} not found`,
-        );
-      }
     }
 
     // Generar la clave API segura
@@ -83,28 +90,30 @@ export class ApiKeyService {
       key: secretKey,
       name: data.name,
       description: data.description,
-      installationUuid: data.installationUuid,
+      status: ApiKeyStatus.ACTIVE,
       expiresAt: data.expiresAt,
+      installationUuid: installation.id,
       createdBy: data.createdBy,
       metadata: data.metadata ?? {},
-      status: ApiKeyStatus.ACTIVE,
       rateLimit: data.rateLimit ?? 300, // Default 300 RPM
     });
 
     // Si se especificó una instalación, crear la relación con permisos
-    if (data.installationUuid) {
+    if (data.installationId) {
       await this.apiKeyInstallationRepository.create({
         apiKeyUuid: apiKey.uuid,
-        installationUuid: data.installationUuid,
+        installationUuid: installation.id,
         permission: data.permission ?? ApiKeyPermission.READ,
         rateLimit: data.rateLimit ?? 100, // Default 100 RPM por instalación
       });
     }
 
+    console.log("created");
+
     // Registrar el evento de creación
     await this.apiKeyLogRepository.logEvent({
       apiKeyUuid: apiKey.uuid,
-      installationUuid: data.installationUuid,
+      installationUuid: installation.id,
       eventType: ApiKeyEventType.CREATED,
       description: `API Key created for ${data.name}`,
       ipAddress: data.requestContext?.ipAddress,
@@ -663,7 +672,7 @@ export class ApiKeyService {
     return this.createApiKey({
       name: apiKey.name,
       description: apiKey.description,
-      installationUuid: apiKey.installationUuid,
+      installationId: apiKey.installationUuid,
       expiresAt: apiKey.expiresAt,
       createdBy: apiKey.createdBy,
       metadata: apiKey.metadata,

@@ -1,4 +1,4 @@
-import { NotFoundException } from "@nestjs/common";
+import { Inject, NotFoundException } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
 import { CustomerRepository } from "../../../customers/customer.repository";
@@ -11,7 +11,9 @@ export class CreateInstallationHandler
   implements ICommandHandler<CreateInstallationCommand>
 {
   constructor(
+    @Inject(InstallationRepository)
     private readonly installationRepository: InstallationRepository,
+    @Inject(CustomerRepository)
     private readonly customerRepository: CustomerRepository,
   ) {}
 

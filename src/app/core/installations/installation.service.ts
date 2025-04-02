@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 
 import { CreateInstallationDto } from "../../api/installations/dtos/create-installation.dto";
@@ -9,7 +9,9 @@ import { GetInstallationByUuidQuery } from "../../data/installations/queries/get
 @Injectable()
 export class InstallationService {
   constructor(
+    @Inject(CommandBus)
     private readonly commandBus: CommandBus,
+    @Inject(QueryBus)
     private readonly queryBus: QueryBus,
   ) {}
 
@@ -17,13 +19,12 @@ export class InstallationService {
     createInstallationDto: CreateInstallationDto,
   ): Promise<InstallationEntity> {
     const { productName, customerId } = createInstallationDto;
-    return await this.commandBus.execute<
-      CreateInstallationCommand,
-      InstallationEntity
-    >(new CreateInstallationCommand(productName, customerId));
+    return await this.commandBus.execute(
+      new CreateInstallationCommand(productName, customerId),
+    );
   }
 
-  async findByUuid(uuid: string): Promise<InstallationEntity | null> {
+  async findByUuid(uuid: string): Promise<InstallationEntity> {
     const installation = await this.queryBus.execute<
       GetInstallationByUuidQuery,
       InstallationEntity | null

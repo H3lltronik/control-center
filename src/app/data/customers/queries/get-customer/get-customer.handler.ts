@@ -1,3 +1,4 @@
+import { Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
 import { CustomerEntity } from "../../customer.entity";
@@ -8,7 +9,10 @@ import { GetCustomerByEmailQuery } from "./get-customer.query";
 export class GetCustomerByEmailHandler
   implements IQueryHandler<GetCustomerByEmailQuery>
 {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(
+    @Inject(CustomerRepository)
+    private readonly customerRepository: CustomerRepository,
+  ) {}
 
   async execute(
     query: GetCustomerByEmailQuery,

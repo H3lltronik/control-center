@@ -5,18 +5,17 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ApiKeysCoreModule } from "../app/core/api-keys/api-keys-core.module";
 import { CustomersCoreModule } from "../app/core/customers/customers-core.module";
 import { InstallationsCoreModule } from "../app/core/installations/installations-core.module";
-import { DatabaseModule } from "../common/database.module";
 import { ApiKeyEntity } from "../app/data/api-keys/api-key.entity";
 import { ApiKeyInstallationEntity } from "../app/data/api-keys/api-key-installation.entity";
 import { ApiKeyLogEntity } from "../app/data/api-keys/api-key-log.entity";
 import { CustomerEntity } from "../app/data/customers/customer.entity";
 import { InstallationEntity } from "../app/data/installations/installation.entity";
 import { LogEntity } from "../app/data/logs/log.entity";
-
+import { DatabaseModule } from "../common/database.module";
 import { InteractiveCLICommand } from "./commands/interactive-cli.command";
 import { SimpleTestCommand } from "./commands/simple-test.command";
-import { ToolingApiKeyService } from "./services/tooling-api-key.service";
 import { EnvironmentInfoService } from "./services/environment-info.service";
+import { ToolingApiKeyService } from "./services/tooling-api-key.service";
 import { ToolingInstallationService } from "./services/tooling-installation.service";
 
 @Module({
@@ -52,7 +51,7 @@ import { ToolingInstallationService } from "./services/tooling-installation.serv
 })
 export class ToolingModule implements OnModuleInit {
   private readonly logger = new Logger(ToolingModule.name);
-  
+
   onModuleInit() {
     // Display basic environment info when the module initializes
     this.logger.log("==========================================");

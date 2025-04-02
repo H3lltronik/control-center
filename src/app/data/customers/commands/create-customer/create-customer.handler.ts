@@ -1,4 +1,4 @@
-import { ConflictException } from "@nestjs/common";
+import { ConflictException, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 
 import { CustomerEntity } from "../../customer.entity";
@@ -9,7 +9,10 @@ import { CreateCustomerCommand } from "./create-customer.command";
 export class CreateCustomerHandler
   implements ICommandHandler<CreateCustomerCommand>
 {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(
+    @Inject(CustomerRepository)
+    private readonly customerRepository: CustomerRepository,
+  ) {}
 
   async execute(command: CreateCustomerCommand): Promise<CustomerEntity> {
     const { email, name, phone } = command;

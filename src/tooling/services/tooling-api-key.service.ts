@@ -40,8 +40,10 @@ export class ToolingApiKeyService {
     const { apiKey } = await this.apiKeyService.createApiKey({
       name,
       description,
-      installationUuid: installationId,
-      expiresAt: expiresInDays ? this.calculateExpiryDate(expiresInDays) : undefined,
+      installationId,
+      expiresAt: expiresInDays
+        ? this.calculateExpiryDate(expiresInDays)
+        : undefined,
       createdBy: "tooling-cli",
       rateLimit,
       permission,
@@ -68,9 +70,12 @@ export class ToolingApiKeyService {
     }
 
     let output = "\nAVAILABLE API KEYS:\n";
-    output += "===================================================================================\n";
-    output += "UUID                                | KEY                     | NAME             | STATUS | INSTALLATION ID | EXPIRES AT\n";
-    output += "-----------------------------------------------------------------------------------\n";
+    output +=
+      "===================================================================================\n";
+    output +=
+      "UUID                                | KEY                     | NAME             | STATUS | INSTALLATION ID | EXPIRES AT\n";
+    output +=
+      "-----------------------------------------------------------------------------------\n";
 
     for (const apiKey of apiKeys) {
       // Truncate key for display
@@ -85,8 +90,9 @@ export class ToolingApiKeyService {
 
       output += `${apiKey.uuid} | ${truncatedKey.padEnd(24)} | ${name} | ${apiKey.status.padEnd(6)} | ${apiKey.installationUuid || "N/A"} | ${expiresAt}\n`;
     }
-    output += "===================================================================================\n";
+    output +=
+      "===================================================================================\n";
 
     return output;
   }
-} 
+}

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 
 import { CreateCustomerDto } from "../../api/customers/dtos/create-customer.dto";
@@ -9,7 +9,9 @@ import { GetCustomerByEmailQuery } from "../../data/customers/queries/get-custom
 @Injectable()
 export class CustomerService {
   constructor(
+    @Inject(CommandBus)
     private readonly commandBus: CommandBus,
+    @Inject(QueryBus)
     private readonly queryBus: QueryBus,
   ) {}
 

@@ -165,18 +165,21 @@ export class InstallationService {
 
     let output = "\nAVAILABLE CUSTOMERS:\n";
     output += "============================================================\n";
-    output += "ID                                  | NAME         | EMAIL               | PHONE\n";
+    output +=
+      "ID                                  | NAME         | EMAIL               | PHONE\n";
     output += "----------------------------------------------------------\n";
 
     for (const customer of customers) {
-      const name = customer.name.length > 12
-        ? `${customer.name.slice(0, 9)}...`
-        : customer.name.padEnd(12);
-      
-      const email = customer.email.length > 18
-        ? `${customer.email.slice(0, 15)}...`
-        : customer.email.padEnd(18);
-      
+      const name =
+        customer.name.length > 12
+          ? `${customer.name.slice(0, 9)}...`
+          : customer.name.padEnd(12);
+
+      const email =
+        customer.email.length > 18
+          ? `${customer.email.slice(0, 15)}...`
+          : customer.email.padEnd(18);
+
       output += `${customer.id} | ${name} | ${email} | ${customer.phone}\n`;
     }
     output += "============================================================\n";

@@ -1,14 +1,11 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class FixApiKeyInstallationReferences1742930367368 implements MigrationInterface {
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        // Primero obtenemos los datos existentes para preservarlos
-        const apiKeyInstallations = await queryRunner.query(
-            `SELECT * FROM api_key_installation`
-        );
-        
-        // Recreamos las relaciones con las propiedades correctas
-        await queryRunner.query(`
+export class FixApiKeyInstallationReferences1742930367368
+  implements MigrationInterface
+{
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    // Recreamos las relaciones con las propiedades correctas
+    await queryRunner.query(`
             -- Deshabilitamos temporalmente las restricciones de clave foránea
             SET CONSTRAINTS ALL DEFERRED;
             
@@ -21,13 +18,11 @@ export class FixApiKeyInstallationReferences1742930367368 implements MigrationIn
             FOREIGN KEY ("installation_uuid") REFERENCES installation(id) 
             ON DELETE CASCADE;
         `);
-        
-        console.log('FixApiKeyInstallationReferences migration applied successfully');
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        // Revertimos los cambios si es necesario
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    // Revertimos los cambios si es necesario
+    await queryRunner.query(`
             -- Deshabilitamos temporalmente las restricciones de clave foránea
             SET CONSTRAINTS ALL DEFERRED;
             
@@ -40,5 +35,5 @@ export class FixApiKeyInstallationReferences1742930367368 implements MigrationIn
             FOREIGN KEY ("installation_uuid") REFERENCES installation(uuid) 
             ON DELETE CASCADE;
         `);
-    }
-} 
+  }
+}

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from "node:path";
 
 import { config } from "dotenv";
@@ -26,14 +27,16 @@ const options: DataSourceOptions = {
       : false,
 };
 
-console.log(`Configuración de migración cargada desde: ${envPath}`);
-console.log(`DB Host: ${options.host}, Port: ${options.port}`);
+console.log(`[TypeORM] Configuración de migración cargada desde: ${envPath}`);
+console.log(`[TypeORM] DB Host: ${options.host}, Port: ${options.port}`);
 
 // Eliminamos el parche que alteraba directamente la propiedad readonly
 // Creamos una nueva configuración con spread
 const finalOptions = { ...options };
 if (finalOptions.host === "postgres" && !process.env.DOCKER_ENV) {
-  console.log("Ejecutando fuera de Docker, cambiando host a localhost");
+  console.log(
+    "[TypeORM] Ejecutando fuera de Docker, cambiando host a localhost",
+  );
   finalOptions.host = "localhost";
 }
 

@@ -11,9 +11,6 @@ import { InstallationEntity } from "../data/installations/installation.entity";
 import { LogEntity } from "../data/logs/log.entity";
 import { ApiKeyGeneratorService } from "./api-key-generator.service";
 import { CleanCommand } from "./commands/clean.command";
-import { GenerateApiKeyCommand } from "./commands/generate-api-key.command";
-import { ListApiKeysCommand } from "./commands/list-api-keys.command";
-import { ListInstallationsCommand } from "./commands/list-installations.command";
 import { ResetCommand } from "./commands/reset.command";
 import { SeedCommand } from "./commands/seed.command";
 import { CustomerSeederService } from "./customer-seeder.service";
@@ -51,31 +48,36 @@ import { SeedersService } from "./seeders.service";
     SeedCommand,
     CleanCommand,
     ResetCommand,
-    GenerateApiKeyCommand,
-    ListInstallationsCommand,
-    ListApiKeysCommand,
   ],
 })
 export class SeederModule implements OnModuleInit {
   private readonly logger = new Logger(SeederModule.name);
-  
-  constructor(@Inject(ConfigService) private readonly configService: ConfigService) {}
-  
+
+  constructor(
+    @Inject(ConfigService) private readonly configService: ConfigService,
+  ) {}
+
   onModuleInit() {
     // Mostrar información de las variables de entorno al iniciar
-    this.logger.log('==========================================');
-    this.logger.log('Iniciando aplicación con las siguientes configuraciones:');
-    this.logger.log(`NODE_ENV: ${this.configService.get('NODE_ENV', 'no definido')}`);
-    this.logger.log(`DB_HOST: ${this.configService.get('DB_HOST', 'no definido')}`);
-    this.logger.log(`DB_PORT: ${this.configService.get('DB_PORT', 'no definido')}`);
-    
+    this.logger.log("==========================================");
+    this.logger.log("Iniciando aplicación con las siguientes configuraciones:");
+    this.logger.log(
+      `NODE_ENV: ${this.configService.get("NODE_ENV", "no definido")}`,
+    );
+    this.logger.log(
+      `DB_HOST: ${this.configService.get("DB_HOST", "no definido")}`,
+    );
+    this.logger.log(
+      `DB_PORT: ${this.configService.get("DB_PORT", "no definido")}`,
+    );
+
     // Información adicional que podría ser útil pero sin exponer datos sensibles
-    const dbName = this.configService.get('DATABASE_NAME');
+    const dbName = this.configService.get<string>("DATABASE_NAME");
     if (dbName) this.logger.log(`DATABASE_NAME: ${dbName}`);
-    
+
     // Verificar modo de ejecución
-    const isDevMode = this.configService.get('NODE_ENV') === 'development';
-    this.logger.log(`Modo: ${isDevMode ? 'Desarrollo' : 'Producción'}`);
-    this.logger.log('==========================================');
+    const isDevMode = this.configService.get("NODE_ENV") === "development";
+    this.logger.log(`Modo: ${isDevMode ? "Desarrollo" : "Producción"}`);
+    this.logger.log("==========================================");
   }
 }
